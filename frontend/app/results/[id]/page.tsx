@@ -19,12 +19,14 @@ export default function ResultsPage({ params }: ResultsPageProps) {
     <div className="min-h-screen bg-white p-6">
       <div className="container mx-auto max-w-6xl">
         <header className="mb-8 flex justify-between items-center">
-          <Link href={`/explanation/${patientId}`}>
+          {/* 🔻 UPDATED: Changed Link from /explanation to /dashboard */}
+          <Link href="/dashboard">
             <Button variant="ghost" className="pl-0">
               <ChevronLeft className="h-4 w-4 mr-2" />
               Back
             </Button>
           </Link>
+          {/* 🔺 END OF UPDATE */}
 
           <h1 className="text-3xl font-bold">Results</h1>
 
@@ -113,4 +115,3 @@ export default function ResultsPage({ params }: ResultsPageProps) {
     </div>
   )
 }
-

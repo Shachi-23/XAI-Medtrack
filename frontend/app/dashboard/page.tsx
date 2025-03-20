@@ -1,8 +1,36 @@
-import Link from "next/link"
+"use client"
+
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { Card, CardContent } from "@/components/ui/card"
 import { Upload, Brain, FileText, BarChart3 } from "lucide-react"
 
 export default function DashboardPage() {
+  const [patientId, setPatientId] = useState("")
+  const [inputValue, setInputValue] = useState("")
+  const router = useRouter()
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (inputValue.trim()) {
+      setPatientId(inputValue.trim())
+    }
+  }
+
+  const handleCardClick = (path: string) => {
+    if (patientId) {
+      const targetPath = path.replace(":patientId", patientId)
+      router.push(targetPath)
+    }
+  }
+
+  const isCardsEnabled = !!patientId
+
+  const cardClasses = (enabled: boolean) =>
+    `hover:shadow-md transition-shadow h-full ${
+      enabled ? "cursor-pointer" : "opacity-50 cursor-not-allowed"
+    } bg-gray-900 text-white`
+
   return (
     <div className="min-h-screen bg-gray-100">
       <div className="container mx-auto px-4 py-8">
@@ -11,23 +39,47 @@ export default function DashboardPage() {
           <p className="text-gray-500">Monitor your MRI scans and AI analysis</p>
         </header>
 
+        {/* Search Bar */}
+        <form onSubmit={handleSearch} className="mb-6 flex gap-2">
+          <input
+            type="text"
+            placeholder="Enter Patient ID"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            className="flex-1 p-2 rounded border border-gray-300 focus:outline-none focus:ring focus:border-blue-500"
+          />
+          <button
+            type="submit"
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Search
+          </button>
+        </form>
+
+        {/* Dashboard Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Uploads Card */}
-          <Link href="/longitudinal${}">
-            <Card className="hover:shadow-md transition-shadow bg-gray-900 text-white h-full">
+          {/* MRI Scans Card */}
+          <div
+            onClick={() => isCardsEnabled && handleCardClick("/longitudinal/:patientId")}
+            className={cardClasses(isCardsEnabled)}
+          >
+            <Card>
               <CardContent className="p-6 flex flex-col">
                 <div className="flex justify-between items-start">
-                  <h3 className="text-xl font-medium">Uploads</h3>
+                  <h3 className="text-xl font-medium">MRI Scans</h3>
                   <Upload className="h-5 w-5 text-gray-300" />
                 </div>
                 <p className="text-2xl font-bold mt-4">361 scans</p>
               </CardContent>
             </Card>
-          </Link>
+          </div>
 
-          {/* AI Processing Card */}
-          <Link href="/processing">
-            <Card className="hover:shadow-md transition-shadow bg-gray-900 text-white h-full">
+          {/* AI Processing Card - Updated to explanation */}
+          <div
+            onClick={() => isCardsEnabled && handleCardClick("/explanation/:patientId")}
+            className={cardClasses(isCardsEnabled)}
+          >
+            <Card>
               <CardContent className="p-6 flex flex-col">
                 <div className="flex justify-between items-start">
                   <h3 className="text-xl font-medium">AI Processing</h3>
@@ -36,11 +88,14 @@ export default function DashboardPage() {
                 <p className="text-2xl font-bold mt-4">361 scans</p>
               </CardContent>
             </Card>
-          </Link>
+          </div>
 
           {/* Results Card */}
-          <Link href="/results">
-            <Card className="hover:shadow-md transition-shadow bg-gray-900 text-white h-full">
+          <div
+            onClick={() => isCardsEnabled && handleCardClick("/results/:patientId")}
+            className={cardClasses(isCardsEnabled)}
+          >
+            <Card>
               <CardContent className="p-6 flex flex-col">
                 <div className="flex justify-between items-start">
                   <h3 className="text-xl font-medium">Results</h3>
@@ -49,11 +104,14 @@ export default function DashboardPage() {
                 <p className="text-2xl font-bold mt-4">361 results</p>
               </CardContent>
             </Card>
-          </Link>
+          </div>
 
           {/* Reports Card */}
-          <Link href="/reports">
-            <Card className="hover:shadow-md transition-shadow bg-gray-900 text-white h-full">
+          <div
+            onClick={() => isCardsEnabled && handleCardClick("/reports")}
+            className={cardClasses(isCardsEnabled)}
+          >
+            <Card>
               <CardContent className="p-6 flex flex-col">
                 <div className="flex justify-between items-start">
                   <h3 className="text-xl font-medium">Reports</h3>
@@ -62,9 +120,10 @@ export default function DashboardPage() {
                 <p className="text-2xl font-bold mt-4">361 reports</p>
               </CardContent>
             </Card>
-          </Link>
+          </div>
         </div>
 
+        {/* Recent Activity */}
         <div className="mt-12">
           <h2 className="text-xl font-semibold mb-4">Recent Activity</h2>
           <Card>
@@ -99,4 +158,3 @@ export default function DashboardPage() {
     </div>
   )
 }
-

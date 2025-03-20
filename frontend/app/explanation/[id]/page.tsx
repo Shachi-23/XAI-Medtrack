@@ -6,15 +6,14 @@ import { ChevronLeft } from "lucide-react"
 
 interface ExplanationPageProps {
   params: {
-    id: string
+    patientId: string
   }
 }
 
 export default function ExplanationPage({ params }: ExplanationPageProps) {
-  const patientId = params.id
+  const { patientId } = params
   const patientName = "XYZ" // This would come from your database
 
-  // Sample analysis data - in a real app, these would come from your database
   const analysisData = [
     {
       date: "2022/01/26",
@@ -81,7 +80,7 @@ export default function ExplanationPage({ params }: ExplanationPageProps) {
                     className="object-cover"
                   />
                 </div>
-                <p className="text-lg font-medium">AI analysis Heatmap</p>
+                <p className="text-lg font-medium">AI Analysis Heatmap</p>
               </div>
             </div>
           </div>
@@ -96,4 +95,3 @@ export default function ExplanationPage({ params }: ExplanationPageProps) {
     </div>
   )
 }
-
